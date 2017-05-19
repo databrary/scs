@@ -151,6 +151,9 @@ func load(r *http.Request, engine Engine, opts *options) (*http.Request, error) 
 	}
 
 	opts.persist = persist
+	if persist {
+		deadline = time.Now().AddDate(1, 0, 0)
+	}
 	s := &session{
 		token:    token,
 		data:     data,
