@@ -69,7 +69,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -96,6 +95,9 @@ func SetPersist(r *http.Request, persist bool) error {
 		return err
 	}
 	s.opts.persist = persist
+	if persist {
+		s.deadline = time.Now().AddDate(1, 0, 0)
+	}
 	return nil
 }
 
@@ -145,7 +147,6 @@ func load(r *http.Request, engine Engine, opts *options) (*http.Request, error) 
 	}
 
 	data, deadline, persist, err := decodeFromJSON(j)
-	fmt.Println(deadline.String())
 	if err != nil {
 		return nil, err
 	}
