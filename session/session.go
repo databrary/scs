@@ -283,7 +283,7 @@ func RegenerateToken(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
+	token = fmt.Sprintf("%s:%s", ContextName, token)
 	s.token = token
 	s.deadline = time.Now().Add(s.opts.lifetime)
 	s.modified = true
@@ -320,7 +320,7 @@ func Renew(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
+	token = fmt.Sprintf("%s:%s", ContextName, token)
 	s.token = token
 	for key := range s.data {
 		delete(s.data, key)
