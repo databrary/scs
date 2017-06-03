@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"log"
 	"net/http"
+	"net"
+	"bufio"
 )
 
 // Deprecated: Middleware previously defined the signature for the session management
@@ -100,6 +102,11 @@ func (bw *bufferedResponseWriter) Flush() {
 		f.Flush()
 		bw.buf.Reset()
 	}
+}
+
+func (bw *bufferedResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+	hj := bw.ResponseWriter.(http.Hijacker)
+	return hj.Hijack()
 }
 
 func defaultErrorFunc(w http.ResponseWriter, r *http.Request, err error) {
