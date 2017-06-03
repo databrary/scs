@@ -72,6 +72,7 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"fmt"
 )
 
 // ErrAlreadyWritten is returned when an attempt is made to modify the session
@@ -115,6 +116,7 @@ func newSession(r *http.Request, engine Engine, opts *options) (*http.Request, e
 	if err != nil {
 		return nil, err
 	}
+	token = fmt.Sprintf("%s:%s", ContextName, token)
 	s := &session{
 		token:    token,
 		data:     make(map[string]interface{}),
@@ -281,7 +283,7 @@ func RegenerateToken(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
+	token = fmt.Sprintf("%s:%s", ContextName, token)
 	s.token = token
 	s.deadline = time.Now().Add(s.opts.lifetime)
 	s.modified = true
@@ -318,7 +320,7 @@ func Renew(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
+	token = fmt.Sprintf("%s:%s", ContextName, token)
 	s.token = token
 	for key := range s.data {
 		delete(s.data, key)
